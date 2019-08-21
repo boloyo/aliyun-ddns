@@ -104,7 +104,7 @@ const updateRecord = (target, callback) => {
     RecordId: '',
     RR: rr,
     Type: 'A',
-    Line: config.line,
+    Line: target.line,
     Value: ip
   };
   const addParmas = {
@@ -112,7 +112,7 @@ const updateRecord = (target, callback) => {
     DomainName: domainName,
     RR: rr,
     Type: 'A',
-    Line: config.line,
+    Line: target.line,
     Value: ip
   };
   // 首先获取域名信息, 目的是获取要更新的域名的 RecordId
@@ -130,7 +130,7 @@ const updateRecord = (target, callback) => {
         let shouldUpdate = false;
         let shouldAdd = true;
         result.DomainRecords.Record
-          .filter(record => record.RR === updateParmas.RR && record.Type === updateParmas.Type && record.Line == config.line)
+          .filter(record => record.RR === updateParmas.RR && record.Type === updateParmas.Type && record.Line == target.line)
           .forEach(record => {
             shouldAdd = false;
             if (record.Value !== updateParmas.Value) {

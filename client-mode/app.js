@@ -94,8 +94,10 @@ function main() {
         }
         let hostnames = config.hostnames;
         for (let hostname of hostnames) {
+
             let target = {
-                hostname: hostname,
+                hostname: hostname.split("@")[0],
+                line: hostname.split("@")[1],
                 ip: pubIp
             };
             alidns.updateRecord(target, (msg) => {

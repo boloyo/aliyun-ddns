@@ -1,6 +1,5 @@
 {
   "AccessKeyId": "",
   "AccessKeySecret": "",
-  "line": "defalut",
-  "hostnames": ["a.foobar.com", "b.foobar.com", "c.foobar.com"]
+  "hostnames": ["a.foobar.com@defalut", "b.foobar.com@telecom", "c.foobar.com@edu"],
 }
