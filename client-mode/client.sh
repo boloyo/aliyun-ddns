@@ -1,3 +1,4 @@
 #!/bin/bash
-cd /home/pi/repo/aliyun-ddns/client-mode
-nodejs app.js
+basepath=$(cd `dirname $0`; pwd)
+cd $basepath
+node app.js
