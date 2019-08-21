@@ -2,7 +2,6 @@
 const http = require('http');
 const alidns = require('./alidns.js');
 const config = require('./config.json');
-
 const simpleGetPubIpUrl = [
     'api.ipify.org',
     'canhazip.com',
@@ -85,25 +84,42 @@ function getPubIpRecur(callback, i) {
 function getPubIp(callback) {
     getPubIpRecur(callback, 0);
 }
-
+var hostIndex = 0
+function updateRecord(pubIp) {
+    let hostname = config.hostnames[hostIndex]
+    let target = {
+        hostname: hostname.split("@")[0],
+        line: hostname.split("@")[1],
+        ip: pubIp
+    };
+    alidns.updateRecord(target, (msg) => {
+        console.log(new Date() + ': [' + msg + '] ' + JSON.stringify(target));
+        hostIndex = hostIndex+1;
+        if(config.hostnames[hostIndex]){
+            updateRecord(pubIp)
+        }
+    });
+}
 function main() {
     getPubIp(pubIp => {
         if (!pubIp) {
             console.log(new Date() + ': [noip]');
             return;
         }
-        let hostnames = config.hostnames;
-        for (let hostname of hostnames) {
+        updateRecord(pubIp);
+        // Same domain and different line would cause ali server internal problem. Just change to one by one.
+        // let hostnames = config.hostnames;
+        // for (let hostname of hostnames) {
 
-            let target = {
-                hostname: hostname.split("@")[0],
-                line: hostname.split("@")[1],
-                ip: pubIp
-            };
-            alidns.updateRecord(target, (msg) => {
-                console.log(new Date() + ': [' + msg + '] ' + JSON.stringify(target));
-            });
-        }
+        // let target = {
+        //     hostname: hostname.split("@")[0],
+        //     line: hostname.split("@")[1],
+        //     ip: pubIp
+        // };
+        // alidns.updateRecord(target, (msg) => {
+        //     console.log(new Date() + ': [' + msg + '] ' + JSON.stringify(target));
+        // });
+        // }
     });
 }
 
